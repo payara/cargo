@@ -21,6 +21,9 @@ package org.codehaus.cargo.container.spi.deployer;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.enterprise.deploy.shared.ModuleType;
 import javax.enterprise.deploy.shared.factories.DeploymentFactoryManager;
@@ -423,7 +426,6 @@ public abstract class AbstractJsr88Deployer extends AbstractRemoteDeployer
                 + " has no JSR-88 match and cannot be remotely deployed.");
         }
 
-        TargetModuleID targetModule = null;
         TargetModuleID[] modules = deploymentManager.getAvailableModules(moduleType,
             deploymentManager.getTargets());
 
@@ -431,27 +433,41 @@ public abstract class AbstractJsr88Deployer extends AbstractRemoteDeployer
         sb.append("Cannot find the module \"");
         sb.append(moduleName);
         sb.append("\". Available modules:");
-        for (TargetModuleID module : modules)
-        {
+        
+        List<TargetModuleID> targetModules = new ArrayList<TargetModuleID>();    
+
+        for (TargetModuleID module : modules) {
             String moduleId = module.getModuleID();
 
-            if (moduleName.equals(moduleId))
-            {
-                targetModule = module;
-                break;
+            if (moduleName.equals(moduleId)) {
+                targetModules.add(module);
+            } else {
+                sb.append("\n\t- ");
+                sb.append(moduleId);
             }
-            sb.append("\n\t- ");
-            sb.append(moduleId);
         }
 
-        if (targetModule == null)
-        {
+        if (targetModules.isEmpty()) {
             throw new CargoException(sb.toString());
         }
+        
+        List<String> currentTargets = Arrays.asList(this.configuration.getProperties().get("cargo.glassfish.target").trim().split(","));
+        List<TargetModuleID> finalTargetModules = new ArrayList<TargetModuleID>();
 
-        TargetModuleID[] targetModules = new TargetModuleID[1];
-        targetModules[0] = targetModule;
-        return targetModules;
+        if (currentTargets.isEmpty()) {
+            finalTargetModules = targetModules;
+        } else {
+            for (TargetModuleID targetModule : targetModules) {
+                for (String target : currentTargets) {
+                    if (targetModule.getTarget().getName().equals(target)) {
+                        finalTargetModules.add(targetModule);
+                        break;
+                    }
+                }
+            }
+        }
+     
+        return finalTargetModules.toArray(new TargetModuleID[finalTargetModules.size()]);
     }
 
     /**
