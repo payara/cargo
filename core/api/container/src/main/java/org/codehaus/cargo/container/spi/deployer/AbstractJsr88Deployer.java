@@ -434,7 +434,7 @@ public abstract class AbstractJsr88Deployer extends AbstractRemoteDeployer
         sb.append(moduleName);
         sb.append("\". Available modules:");
         
-        List<TargetModuleID> targetModules = new ArrayList<TargetModuleID>();    
+        List<TargetModuleID> targetModules = new ArrayList<>();    
 
         for (TargetModuleID module : modules) {
             String moduleId = module.getModuleID();
@@ -452,7 +452,7 @@ public abstract class AbstractJsr88Deployer extends AbstractRemoteDeployer
         }
         
         List<String> currentTargets = Arrays.asList(this.configuration.getProperties().get("cargo.glassfish.target").trim().split(","));
-        List<TargetModuleID> finalTargetModules = new ArrayList<TargetModuleID>();
+        List<TargetModuleID> finalTargetModules = new ArrayList<>();
 
         if (currentTargets.isEmpty()) {
             finalTargetModules = targetModules;
@@ -467,7 +467,7 @@ public abstract class AbstractJsr88Deployer extends AbstractRemoteDeployer
             }
         }
      
-        return finalTargetModules.toArray(new TargetModuleID[finalTargetModules.size()]);
+        return finalTargetModules.toArray(new TargetModuleID[0]);
     }
 
     /**
