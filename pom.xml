@@ -20,7 +20,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.cargo</groupId>
   <artifactId>codehaus-cargo</artifactId>
-  <version>1.8.4</version>
+  <version>1.8.4.payara-p1</version>
   <packaging>pom</packaging>
 
   <name>Codehaus Cargo</name>
