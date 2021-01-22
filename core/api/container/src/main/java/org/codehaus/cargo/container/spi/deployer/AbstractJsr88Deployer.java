@@ -17,6 +17,7 @@
  *
  * ========================================================================
  */
+// Portions Copyright [2021] Payara Foundation and/or affiliates
 package org.codehaus.cargo.container.spi.deployer;
 
 import java.io.File;
@@ -457,7 +458,7 @@ public abstract class AbstractJsr88Deployer extends AbstractRemoteDeployer
         }
 
         List<String> currentTargets = Arrays.asList(this.configuration.getProperties()
-                .get("cargo.glassfish.target").trim().split(","));
+                .getOrDefault("cargo.glassfish.target", "").trim().split(","));
         List<TargetModuleID> finalTargetModules = new ArrayList<>();
 
         if (currentTargets.isEmpty())
