@@ -433,40 +433,52 @@ public abstract class AbstractJsr88Deployer extends AbstractRemoteDeployer
         sb.append("Cannot find the module \"");
         sb.append(moduleName);
         sb.append("\". Available modules:");
-        
-        List<TargetModuleID> targetModules = new ArrayList<>();    
 
-        for (TargetModuleID module : modules) {
+        List<TargetModuleID> targetModules = new ArrayList<>();
+
+        for (TargetModuleID module : modules)
+        {
             String moduleId = module.getModuleID();
 
-            if (moduleName.equals(moduleId)) {
+            if (moduleName.equals(moduleId))
+            {
                 targetModules.add(module);
-            } else {
+            }
+            else
+            {
                 sb.append("\n\t- ");
                 sb.append(moduleId);
             }
         }
 
-        if (targetModules.isEmpty()) {
+        if (targetModules.isEmpty())
+        {
             throw new CargoException(sb.toString());
         }
-        
-        List<String> currentTargets = Arrays.asList(this.configuration.getProperties().get("cargo.glassfish.target").trim().split(","));
+
+        List<String> currentTargets = Arrays.asList(this.configuration.getProperties()
+                .get("cargo.glassfish.target").trim().split(","));
         List<TargetModuleID> finalTargetModules = new ArrayList<>();
 
-        if (currentTargets.isEmpty()) {
+        if (currentTargets.isEmpty())
+        {
             finalTargetModules = targetModules;
-        } else {
-            for (TargetModuleID targetModule : targetModules) {
-                for (String target : currentTargets) {
-                    if (targetModule.getTarget().getName().equals(target)) {
+        }
+        else
+        {
+            for (TargetModuleID targetModule : targetModules)
+            {
+                for (String target : currentTargets)
+                {
+                    if (targetModule.getTarget().getName().equals(target))
+                    {
                         finalTargetModules.add(targetModule);
                         break;
                     }
                 }
             }
         }
-     
+
         return finalTargetModules.toArray(new TargetModuleID[0]);
     }
 
